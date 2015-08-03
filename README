@@ -1,0 +1,18 @@
+shortref
+--------
+
+This is an extension to the 'hyperref' LaTeX package. It adds the command
+\sautoref that functions similarly to the traditional \autoref. Whereas
+\autoref will print "Lemma 5.4", \sautoref is intended to print something like
+"L5.4". Similarly, \autoref might yield "section 1.1", whereas \sautoref could
+be made to give "\S 1.1".
+
+I originally made this so that I could put compact references on mathmode/TikZ
+arrows. The hook functionality is the same as with autoref, but everything is
+prefixed with an 's'. For example:
+
+\providecommand*\figureautorefname{Figure} % hyperref default for \autoref
+\providecommand*\figuresautorefname{F} % shortref example for \sautoref
+
+The former will give "Figure 1.2" (for example), while the latter would then
+give "F1.2".

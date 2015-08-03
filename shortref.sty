@@ -1,0 +1,106 @@
+% TODO: documentation
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{shortref}[2015/06/03 v0.1 additional short reference names for hyperref]
+\RequirePackage{hyperref} % necessary!
+\makeatletter
+\DeclareRobustCommand*{\sautoref}{%
+  \leavevmode
+  \@ifstar{\HyRef@sautoref\@gobbletwo}{\HyRef@sautoref\hyper@@link}%
+}
+\def\HyRef@sautoref#1#2{%
+  \text{%
+    \begingroup
+      \Hy@safe@activestrue
+      \expandafter\HyRef@sautosetref\csname r@#2\endcsname{#2}{#1}%
+    \endgroup
+  }%
+}
+\def\HyRef@sautosetref#1#2#3{% link command, csname, refname
+  \HyRef@ShowKeysRef{#2}%
+  \ifcase 0\ifx#1\relax 1\fi\ifx#1\Hy@varioref@undefined 1\fi\relax
+    \edef\HyRef@thisref{%
+      \expandafter\@fourthoffive#1\@empty\@empty\@empty
+    }%
+    \expandafter\HyRef@stestreftype\HyRef@thisref.\\%
+    \Hy@safe@activesfalse
+    #3{%
+      \expandafter\@fifthoffive#1\@empty\@empty\@empty
+    }{%
+      \expandafter\@fourthoffive#1\@empty\@empty\@empty
+    }{%
+      \HyRef@currentHtag
+      \expandafter\@firstoffive#1\@empty\@empty\@empty
+      \null
+    }%
+  \else
+    \protect\G@refundefinedtrue
+    \nfss@text{\reset@font\bfseries ??}%
+    \@latex@warning{%
+      Reference `#2' on page \thepage\space undefined%
+    }%
+  \fi
+}
+\def\HyRef@stestreftype#1.#2\\{%
+  \ltx@IfUndefined{#1sautorefname}{%
+    \ltx@IfUndefined{#1name}{%
+      \HyRef@StripStar#1\\*\\\@nil{#1}%
+      \ltx@IfUndefined{\HyRef@name sautorefname}{%
+        \ltx@IfUndefined{\HyRef@name name}{%
+          \def\HyRef@currentHtag{}%
+          \Hy@Warning{No sautoref name for `#1'}%
+        }{%
+          \edef\HyRef@currentHtag{%
+            \expandafter\noexpand\csname\HyRef@name name\endcsname
+            \noexpand~%
+          }%
+        }%
+      }{%
+        \edef\HyRef@currentHtag{%
+          \expandafter\noexpand
+          \csname\HyRef@name sautorefname\endcsname
+          \noexpand%
+        }%
+      }%
+    }{%
+      \edef\HyRef@currentHtag{%
+        \expandafter\noexpand\csname#1name\endcsname
+        \noexpand%
+      }%
+    }%
+  }{%
+    \edef\HyRef@currentHtag{%
+      \expandafter\noexpand\csname#1sautorefname\endcsname
+      \noexpand%
+    }%
+  }%
+}
+\providecommand*\AMSsautorefname{\equationsautorefname}
+\providecommand*\Hfootnotesautorefname{\footnotesautorefname}
+\providecommand*\Itemsautorefname{\itemsautorefname}
+\providecommand*\itemsautorefname{item}
+\providecommand*\equationsautorefname{Equation}
+\providecommand*\footnotesautorefname{footnote}
+\providecommand*\itemsautorefname{item}
+\providecommand*\figuresautorefname{Figure}
+\providecommand*\tablesautorefname{Table}
+\providecommand*\partsautorefname{Part}
+\providecommand*\appendixsautorefname{Appendix}
+\providecommand*\chaptersautorefname{chapter}
+\providecommand*\subsectionsautorefname{subsection}
+\providecommand*\subsubsectionsautorefname{subsubsection}
+\providecommand*\paragraphsautorefname{paragraph}
+\providecommand*\subparagraphsautorefname{subparagraph}
+\providecommand*\FancyVerbLinesautorefname{line}
+\providecommand*\theoremsautorefname{Theorem}
+\providecommand*\pagesautorefname{page}
+% custom
+%\providecommand*\sectionsautorefname{\S}
+%\providecommand*{\lemsautorefname}{L}
+%\providecommand*{\thmsautorefname}{T}
+%\providecommand*{\propsautorefname}{P}
+%\providecommand*{\corsautorefname}{C}
+%\providecommand*{\defnsautorefname}{D}
+%\providecommand*{\remsautorefname}{D}
+%\def\equationautorefname~#1\null{(#1)\null}
+%\providecommand*\Appendixsautorefname{\S}
+\makeatother
